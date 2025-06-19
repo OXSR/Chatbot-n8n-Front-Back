@@ -18,7 +18,7 @@ Este proyecto está compuesto por dos partes:
 
 ## Tecnologías utilizadas
 
-- **Frontend**: React (todo generado por IA)
+- **Frontend**: React (todo generado por IA en replit.com)
 - **Backend**: [n8n](https://n8n.io) usando nodos, lógica visual y webhook
 - **Comunicación**: HTTP Webhook vía JSON POST
 
