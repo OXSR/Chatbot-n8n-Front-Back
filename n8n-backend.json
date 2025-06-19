@@ -1,0 +1,142 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "1116aeb3-d7c6-4ced-82d2-ca8662a46692",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -40
+      ],
+      "id": "f7b3fd5f-f3c0-461d-b487-ab43c6e73542",
+      "name": "Webhook",
+      "webhookId": "1116aeb3-d7c6-4ced-82d2-ca8662a46692"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"respuesta_al_usuario\": \"{{ $json.output }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        -40
+      ],
+      "id": "b2fac8bc-a77b-4c52-8d11-86f2246dcd57",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Responde a esta consulta: {{ $json.body.prompt }}\n\nLas respuestas no pueden contener carácters extraños. Debe ser texto plano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -20,
+        -40
+      ],
+      "id": "70ff1eda-4ca0-4030-a4ae-b1763cd88205",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -40,
+        180
+      ],
+      "id": "4cdab026-9a9a-4c00-8f72-8220e3af5954",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "oSzu03UWaMsPgPuD",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Funcionamiento \nRecive la solicitud vía webhook y en formato json y responde vía chatgpt API 4o-mini para evitar costes, luego responde el webhook vía json"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        160
+      ],
+      "id": "4b849d02-3cfe-4188-b483-b82af369a5d9",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## By OXSR (Oseguir)",
+        "height": 80
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        180
+      ],
+      "id": "daff2c2c-21fb-4b24-b7e0-90841c585e0d",
+      "name": "Sticky Note1"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b643a27a3e5d7748d41ee6285fc688ed2cbf9a93ddb8d5b0ae79684ac7064b2b"
+  }
+}
